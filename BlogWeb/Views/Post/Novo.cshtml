@@ -1,0 +1,24 @@
+﻿@model BlogWeb.Models.Post
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Novo</title>
+</head>
+<body>
+    <form action="/post/incluir" method="post">
+        <label>Título: <input name="titulo"/></label>
+        <br />
+        <label>Resumo: <input name="resumo"/></label>
+        <br />
+        <label>Categoria: <input name="categoria"/></label>
+        <br />
+        <button type="submit">Cadastrar</button>
+    </form>
+</body>
+</html>

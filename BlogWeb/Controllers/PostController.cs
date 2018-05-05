@@ -1,61 +1,84 @@
-﻿using BlogWeb.Models;
+﻿using BlogWeb.DAO;
+using BlogWeb.Models;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace BlogWeb.Controllers
 {
     public class PostController : Controller
     {
+        private PostDaoEF dao;
+
+        public PostController()
+        {
+            dao = new PostDaoEF();
+        }
 
         // GET: Post
         public ActionResult Index()
         {
-            var posts = new List<Post>();
-            string stringConexao = ConfigurationManager.ConnectionStrings["blog"].ConnectionString;
-            using (SqlConnection connection = new SqlConnection(stringConexao))
-            {
-                connection.Open();
-                SqlCommand command = connection.CreateCommand();
-                command.CommandText = "select * from Posts";
-                SqlDataReader reader = command.ExecuteReader();
-                while(reader.Read())
-                {
-                    Post post = new Post()
-                    {
-                        Id = Convert.ToInt32(reader["id"]),
-                        Titulo = Convert.ToString(reader["titulo"]),
-                        Resumo = Convert.ToString(reader["resumo"]),
-                        Categoria = Convert.ToString(reader["categoria"])
-                    };
-                    posts.Add(post);
-                }
-            }
-            return View(posts);
+            var lista = dao.Lista();
+            return View(lista);
         }
 
         public ActionResult Novo()
         {
-            return View();
+            return View(new Post());
         }
 
         [HttpPost]
         public ActionResult Incluir(Post post)
         {
-            string stringConexao = ConfigurationManager.ConnectionStrings["blog"].ConnectionString;
-            using (SqlConnection connection = new SqlConnection(stringConexao))
+            if (ModelState.IsValid)
             {
-                connection.Open();
-                SqlCommand command = connection.CreateCommand();
-                command.CommandText = "insert into Posts(titulo, resumo, categoria) values ('"+post.Titulo+"','"+post.Resumo+"','"+post.Categoria+"')";
-                command.ExecuteNonQuery();
+                dao.Incluir(post);
+                return RedirectToAction("index");
             }
-        
+            HttpContext.Response.StatusCode = 400;
+            return View("Novo", post);
+        }
+
+        public ActionResult Remover(int id)
+        {
+            dao.Excluir(id);
             return RedirectToAction("index");
         }
+
+        public ActionResult Detalhe(int id)
+        {
+            var post = dao.BuscaPorId(id);
+            if (post != null)
+            {
+                return View(post);
+            } 
+            return HttpNotFound();
+        }
+
+        [HttpPost]
+        public ActionResult Alterar(Post post)
+        {
+            if (ModelState.IsValid)
+            {
+                dao.Atualizar(post);
+                return RedirectToAction("index");
+            }
+            HttpContext.Response.StatusCode = 400;
+            return View("detalhe", post);
+        }
+
+        public ActionResult Publicar(int id)
+        {
+            var post = dao.BuscaPorId(id);
+            if (post != null)
+            {
+                post.DataPublicacao = DateTime.Now;
+                post.Publicado = true;
+                dao.Atualizar(post);
+                return RedirectToAction("index");
+            }
+            return HttpNotFound();
+        }
+
+
     }
 }

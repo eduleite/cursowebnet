@@ -8,22 +8,25 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Novo</title>
+    <title>Alterar</title>
 </head>
 <body>
-    <form action="/post/incluir" method="post">
+    <form action="/post/alterar" method="post">
+        @Html.HiddenFor(p => p.Id)
+        @Html.HiddenFor(p => p.Publicado)
+        @Html.HiddenFor(p => p.DataPublicacao)
         @Html.LabelFor(p => p.Titulo)
         @Html.TextBoxFor(p => p.Titulo)
-        @Html.ValidationMessageFor(p => p.Titulo)
+        @Html.ValidationMessageFor(p -> p.Titulo)
         <br />
         @Html.LabelFor(p => p.Resumo)
         @Html.TextBoxFor(p => p.Resumo)
-        @Html.ValidationMessageFor(p => p.Resumo)
+        @Html.ValidationMessageFor(p->p.Resumo)
         <br />
         @Html.LabelFor(p => p.Categoria)
         @Html.TextBoxFor(p => p.Categoria)
         <br />
-        <button type="submit">Cadastrar</button>
+        <button type="submit">Gravar</button>
     </form>
     <script src="~/Scripts/jquery-3.3.1.js"></script>
     <script src="~/Scripts/jquery.validate.js"></script>

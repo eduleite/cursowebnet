@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using BlogWeb.Infra;
+using BlogWeb.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 [assembly: OwinStartup(typeof(BlogWeb.App_Start.Startup))]
 
@@ -22,6 +22,18 @@ namespace BlogWeb.App_Start
                 LoginPath = new PathString("/Autenticacao/Login")
             };
             builder.UseCookieAuthentication(options);
+
+            builder.CreatePerOwinContext<BlogContext>(() => new BlogContext());
+            builder.CreatePerOwinContext<IUserStore<Usuario>>((opt, owinContext) =>
+            {
+                var context = owinContext.Get<BlogContext>();
+                return new UserStore<Usuario>(context);
+            });
+            builder.CreatePerOwinContext<UserManager<Usuario>>((opt, owinContext) =>
+            {
+                var store = owinContext.Get<IUserStore<Usuario>>();
+                return new UserManager<Usuario>(store);
+            });
         }
     }
 }

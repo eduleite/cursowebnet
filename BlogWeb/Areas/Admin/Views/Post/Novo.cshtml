@@ -1,0 +1,14 @@
+﻿@model BlogWeb.Models.Post
+
+    @using (Html.BeginForm("Incluir", "Post", FormMethod.Post))
+    {
+        @Html.EditorFor(p => p)
+        <br />
+        <button type="submit">Cadastrar</button>
+    }
+
+@section Scripts {
+
+    @Html.Partial("Scripts")
+
+}

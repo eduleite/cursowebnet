@@ -1,15 +1,14 @@
-﻿
+﻿@model IList<BlogWeb.Models.Post>
+
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-</body>
-</html>
+@foreach(var p in Model)
+{
+    <article>
+        <h1>@p.Titulo</h1>
+        <p>@p.Resumo</p>
+        <p>@p.DataPublicacao</p>
+    </article>
+}

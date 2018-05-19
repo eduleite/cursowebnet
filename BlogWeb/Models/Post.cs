@@ -20,5 +20,8 @@ namespace BlogWeb.Models
         public bool Publicado { get; set; }
         public DateTime? DataPublicacao { get; set; }
 
+        public string AutorId { get; set; }
+        public virtual Usuario Autor { get; set; }
+
     }
 }

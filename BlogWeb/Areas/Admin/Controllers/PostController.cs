@@ -1,10 +1,14 @@
 ﻿using BlogWeb.DAO;
 using BlogWeb.Models;
+using Microsoft.AspNet.Identity;
 using System;
+using System.Linq;
 using System.Web.Mvc;
 
-namespace BlogWeb.Controllers
+namespace BlogWeb.Areas.Admin.Controllers
 {
+
+    [Authorize]
     public class PostController : Controller
     {
         private PostDaoEF dao;
@@ -31,8 +35,12 @@ namespace BlogWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (User.Identity.IsAuthenticated)
+                {
+                    post.AutorId = User.Identity.GetUserId();
+                }
                 dao.Incluir(post);
-                return RedirectToAction("index");
+                return RedirectToAction("index", new { Area = "Admin" });
             }
             HttpContext.Response.StatusCode = 400;
             return View("Novo", post);
@@ -41,7 +49,7 @@ namespace BlogWeb.Controllers
         public ActionResult Remover(int id)
         {
             dao.Excluir(id);
-            return RedirectToAction("index");
+            return RedirectToAction("index", new { Area = "Admin" });
         }
 
         public ActionResult Detalhe(int id)
@@ -60,7 +68,7 @@ namespace BlogWeb.Controllers
             if (ModelState.IsValid)
             {
                 dao.Atualizar(post);
-                return RedirectToAction("index");
+                return RedirectToAction("index", new { Area = "Admin" });
             }
             HttpContext.Response.StatusCode = 400;
             return View("detalhe", post);
@@ -74,9 +82,20 @@ namespace BlogWeb.Controllers
                 post.DataPublicacao = DateTime.Now;
                 post.Publicado = true;
                 dao.Atualizar(post);
-                return RedirectToAction("index");
+                return RedirectToAction("index", new { Area = "Admin" });
             }
             return HttpNotFound();
+        }
+
+        [HttpPost]
+        public ActionResult CategoriaAutocomplete(string termo)
+        {
+            var categorias = dao.Listar()
+                .Where(p => p.Categoria.ToLower().Contains(termo.ToLower()))
+                .Select(p => new { label = p.Categoria })
+                .Distinct()
+                .ToList();
+            return Json(categorias);
         }
 
 

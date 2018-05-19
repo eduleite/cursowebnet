@@ -46,5 +46,10 @@ namespace BlogWeb.DAO
             return ctx.Posts.FirstOrDefault(p => p.Id == id);
         }
 
+        public IList<Post> Listar()
+        {
+            return ctx.Posts.ToList();
+        }
+
     }
 }

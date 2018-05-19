@@ -1,0 +1,11 @@
+﻿<aside>
+    <h1>Administração</h1>
+    <p>Bem vindo, @User.Identity.Name! @Html.ActionLink("Logout", "Logout", new { area = "", controller = "Autenticacao" })</p>
+    <div>
+        <ul>
+            <li>@Html.ActionLink("Posts", "Index", "Post")</li>
+            <li>@Html.ActionLink("Usuários", "Index", "Usuario")</li>
+            <li>@Html.ActionLink("Ver Site", "Index", new { area = "", controller = "Home" })</li>
+        </ul>
+    </div>
+</aside>

@@ -1,0 +1,27 @@
+﻿@model IEnumerable<BlogWeb.Models.Usuario>
+
+<div class="row">
+    <div class="col-sm">
+        <h2>Cadastro de Usuários registrados no sistema</h2>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Usuário</th>
+            <th>Email</th>
+            <th>Último Login</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+            {
+            <tr>
+                <td>@p.UserName</td>
+                <td>@p.Email</td>
+                <td>@p.UltimoLogin</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,17 @@
+﻿@model BlogWeb.Models.Post
+
+    @using (Html.BeginForm("Alterar", "Post", FormMethod.Post))
+    {
+        @Html.HiddenFor(p => p.Id)
+        @Html.HiddenFor(p => p.Publicado)
+        @Html.HiddenFor(p => p.DataPublicacao)
+        @Html.EditorFor(p => p)
+        <br />
+        <button type="submit" class="btn btn-primary">Gravar</button>
+    }
+
+@section Scripts {
+    
+@Html.Partial("Scripts")    
+    
+}
